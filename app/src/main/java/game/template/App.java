@@ -7,7 +7,6 @@ import java.net.URL;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -15,23 +14,41 @@ public class App extends Application
 {
     private int width = 800;
     private int height = 800;
-    private StackPane root;
+    private VBox root;
     private PageManager pageManager;
+    private VBox pageRoot;
+    private final int minWidth = 500;
+    private final int minHeight = 500;
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {   
+        // set the minimum width of the primary stage
+        primaryStage.setMinWidth(minWidth);
+        primaryStage.setMinHeight(minHeight);
+
         // the basic layout on top of which all separate scenes will be added
-        root = new StackPane();
+        root = new VBox();
+        pageRoot = new VBox();
+
+        root.getStyleClass().add("root");
+
+        root.getChildren().add(pageRoot);
+        pageRoot.getStyleClass().add("page");
+
+        // make sure that the pageRoot takes up the entire space of the root
+        pageRoot.prefWidthProperty().bind(root.widthProperty());
+        pageRoot.prefHeightProperty().bind(root.heightProperty());
 
         // we never touch this aferwards hopefully
         Scene scene = new Scene(root, width, height);
 
         // the scene manager will help us switch between different scenes
-        pageManager = new PageManager(root);
+        pageManager = new PageManager(pageRoot);
 
-        Page mainMenu = new Page(new VBox(), "mainMenu", pageManager);
+        Page mainMenu = new MainMenu("menu", pageManager);
         pageManager.addPage(mainMenu);
+        pageManager.addPage(new GamePage("game", pageManager));
 
         // add the stylesheet to the project
         URL styleURL = getClass().getResource("/style.css");
@@ -45,7 +62,7 @@ public class App extends Application
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
-            System.out.println("oncloserequest");
+            System.out.println("Closing the game");
         });
 
     }

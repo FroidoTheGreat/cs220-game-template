@@ -2,7 +2,6 @@ package game.template;
 
 import java.util.HashMap;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
 public class PageManager {
@@ -27,12 +26,11 @@ public class PageManager {
     }
 
     public void addPage(Page page) {
-        System.out.println("Adding page " + page);
         pages.put(page.getName(), page);
 
         // if there is no current page, set the current page to the first page added
         if (current == null) {
-            current = page;
+            setPage(page.name);
         }
     }
 
@@ -51,7 +49,8 @@ public class PageManager {
         if (pages.get(name) == null) {
             throw new IllegalArgumentException("Scene " + name + " does not exist");
         }
+        current = pages.get(name);
         main.getChildren().clear();
-        main.getChildren().add(pages.get(name).getRoot());
+        main.getChildren().add(current.getRoot());
     }
 }
