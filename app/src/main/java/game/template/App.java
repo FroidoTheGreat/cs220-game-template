@@ -17,15 +17,28 @@ public class App extends Application
     private VBox root;
     private PageManager pageManager;
     private VBox pageRoot;
-    private final int minWidth = 500;
-    private final int minHeight = 500;
+    private final int minWidth = 600;
+    private final int minHeight = 600;
+    private Boolean fullscreen = false;
+    private Stage primaryStage;
+    private Scene scene;
+
+    public static App app;
 
     @Override
     public void start(Stage primaryStage) throws Exception
-    {   
+    {      
+        app = this;
         // set the minimum width of the primary stage
+        this.primaryStage = primaryStage;
         primaryStage.setMinWidth(minWidth);
         primaryStage.setMinHeight(minHeight);
+
+        // get rid of the annoying fullscreen exit hint
+        primaryStage.setFullScreenExitHint("");
+
+        // load all sprites
+        SpriteManager.loadSprites("src/main/resources/assets/sprites");
 
         // the basic layout on top of which all separate scenes will be added
         root = new VBox();
@@ -41,7 +54,7 @@ public class App extends Application
         pageRoot.prefHeightProperty().bind(root.heightProperty());
 
         // we never touch this aferwards hopefully
-        Scene scene = new Scene(root, width, height);
+        scene = new Scene(root, width, height);
 
         // the scene manager will help us switch between different scenes
         pageManager = new PageManager(pageRoot);
@@ -49,6 +62,8 @@ public class App extends Application
         Page mainMenu = new MainMenu("menu", pageManager);
         pageManager.addPage(mainMenu);
         pageManager.addPage(new GamePage("game", pageManager));
+        pageManager.addPage(new PauseMenu("pause", pageManager));
+        pageManager.addPage(new OptionsMenu("options", pageManager));
 
         // add the stylesheet to the project
         URL styleURL = getClass().getResource("/style.css");
@@ -70,5 +85,21 @@ public class App extends Application
     public static void main(String[] args) 
     {
         launch(args);
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public Boolean getFullscreen() {
+        return fullscreen;
+    }
+    public void setFullscreen(Boolean fullscreen) {
+        this.fullscreen = fullscreen;
+        if (fullscreen) {
+            primaryStage.setFullScreen(true);
+        } else {
+            primaryStage.setFullScreen(false);
+        }
     }
 }

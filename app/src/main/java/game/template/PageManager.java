@@ -1,6 +1,7 @@
 package game.template;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import javafx.scene.layout.Pane;
 
@@ -8,6 +9,7 @@ public class PageManager {
     HashMap<String, Page> pages = new HashMap<String, Page>();
     Pane main;
     Page current;
+    ArrayList<Page> history = new ArrayList<Page>();
 
     public PageManager(Pane main, Page initial) {
         this.main = main;
@@ -49,8 +51,20 @@ public class PageManager {
         if (pages.get(name) == null) {
             throw new IllegalArgumentException("Scene " + name + " does not exist");
         }
+        history.add(current);
         current = pages.get(name);
         main.getChildren().clear();
         main.getChildren().add(current.getRoot());
+    }
+    public void back() {
+        if (history.size() > 0) {
+            current = history.remove(history.size() - 1);
+            main.getChildren().clear();
+            main.getChildren().add(current.getRoot());
+        }
+    }
+
+    public Page getCurrent() {
+        return current;
     }
 }

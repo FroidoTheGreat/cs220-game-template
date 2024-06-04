@@ -2,18 +2,20 @@
     Document   : style.css
 */
 
-.root {
-    
-}
-
 .page {
-    -fx-background-color: #fff8ee;
+    -fx-background-color: #ffffff;
 }
 
-.menu-item {
+.text {
     -fx-font-size: 20pt;
     -fx-font-family: Arial;
     -fx-text-fill: #000000;
+}
+.menu-item {
+    -fx-padding: 10;
+}
+.menu-item:hover {
+    -fx-background-color: #f0f0f0;
 }
 
 .game-tile-black {
@@ -25,5 +27,23 @@
 }
 
 .exit-button {
+    /*-fx-background-color: #10131b;*/
+}
+
+.arrow {
     -fx-background-color: #10131b;
 }
+
+/*
+TEST STYLES
+
+.TEST-bottom-bar {
+    -fx-background-color: #356bff;
+}
+.TEST-top-bar {
+    -fx-background-color: #ff35da;
+}
+.TEST-game-grid {
+    -fx-background-color: #35ff35;
+}
+*/
